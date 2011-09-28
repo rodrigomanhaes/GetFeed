@@ -1,6 +1,7 @@
 import re
 import feedparser
 import pynotify
+from apscheduler.scheduler import Scheduler
 
 
 class Feed(object):
@@ -18,7 +19,7 @@ class GetFeed(object):
     def __init__(self, url):
         self.url = url
 
-    def get_last_feed(self):
+    def get_new_feed(self):
         rss = feedparser.parse(self.url)
         title = rss.entries[0].title
         feed = Feed(title)
@@ -26,7 +27,14 @@ class GetFeed(object):
 
 
 def main():
-    getfeed = GetFeed("http://planetansi.heroku.com/feeds/githubs")
-    feed = getfeed.get_last_feed()
-    feed.show()
+    sched = Scheduler()
+    @sched.interval_schedule(seconds=10)
+    def show_last_feed():
+        getfeed = GetFeed("http://planetansi.heroku.com/feeds/githubs")
+        feed = getfeed.get_new_feed()
+        if feed:
+            feed.show()
+    sched.start()
+    while sched.running:
+        pass
 
