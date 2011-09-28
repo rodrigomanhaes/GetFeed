@@ -16,5 +16,5 @@ class TestGetFeed(unittest.TestCase):
             from feedparser import parse
             parse("url") >> rss
         getfeed = GetFeed("url")
-        feed = getfeed.get_last_feed()
+        feed = getfeed.get_new_feed()
         feed.title |should| equal_to("Feed title")

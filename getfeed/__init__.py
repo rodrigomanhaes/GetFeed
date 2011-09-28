@@ -1,4 +1,3 @@
-import re
 import feedparser
 import pynotify
 from apscheduler.scheduler import Scheduler
